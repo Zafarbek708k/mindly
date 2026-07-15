@@ -6,6 +6,7 @@ import 'package:mindly/feature/explore/presentation/pages/search_screen.dart';
 import 'package:mindly/feature/navigation/app_shell.dart';
 import 'package:mindly/feature/profile/presentation/pages/edit_profile_screen.dart';
 import 'package:mindly/feature/profile/presentation/pages/settings_screen.dart';
+import 'package:mindly/feature/quiz/domain/entities/quiz_result.dart';
 import 'package:mindly/feature/quiz/presentation/pages/quiz_details_screen.dart';
 import 'package:mindly/feature/quiz/presentation/pages/quiz_play_screen.dart';
 import 'package:mindly/feature/quiz/presentation/pages/quiz_result_screen.dart';
@@ -40,7 +41,11 @@ abstract class AppRoutes {
         return _slide(routeSettings, QuizPlayScreen(quizId: args as String? ?? ''));
 
       case quizResult:
-        return _fade(routeSettings, const QuizResultScreen());
+        // Expects a QuizResult argument from the play screen.
+        final result = args is QuizResult
+            ? args
+            : const QuizResult(totalQuestions: 0, correctAnswers: 0, timeSpent: Duration.zero);
+        return _fade(routeSettings, QuizResultScreen(result: result));
 
       case category:
         return _slide(routeSettings, CategoryScreen(categoryId: args as String? ?? ''));

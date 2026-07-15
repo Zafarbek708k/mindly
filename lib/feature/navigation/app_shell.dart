@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mindly/core/const/app_icons.dart';
 import 'package:mindly/core/const/static_values.dart';
-import 'package:mindly/feature/activity/presentation/pages/activity_screen.dart';
 import 'package:mindly/feature/common/animateed_button.dart';
 import 'package:mindly/feature/explore/presentation/pages/explore_screen.dart';
 import 'package:mindly/feature/home/presentation/pages/home_screen.dart';
@@ -13,18 +14,16 @@ import 'package:mindly/route/app_router.dart';
 import 'package:mindly/route/route_analytics_oberver.dart';
 
 enum MindlyTab {
-  home('/home_screen', 'Home', Icons.home_outlined, Icons.home_rounded),
-  explore('/explore_screen', 'Explore', Icons.explore_outlined, Icons.explore_rounded),
-  leaderboard('/leaderboard_screen', 'Leaderboard', Icons.leaderboard_outlined, Icons.leaderboard_rounded),
-  activity('/activity_screen', 'Activity', Icons.notifications_none_rounded, Icons.notifications_rounded),
-  profile('/profile_screen', 'Profile', Icons.person_outline_rounded, Icons.person_rounded);
+  home('/home_screen', 'Home', AppIcons.home),
+  explore('/explore_screen', 'Explore', AppIcons.reactor),
+  leaderboard('/leaderboard_screen', 'Leaderboard', AppIcons.trophy),
+  profile('/profile_screen', 'Profile', AppIcons.user);
 
   final String path;
   final String title;
-  final IconData icon;
-  final IconData activeIcon;
+  final String icon;
 
-  const MindlyTab(this.path, this.title, this.icon, this.activeIcon);
+  const MindlyTab(this.path, this.title, this.icon);
 }
 
 class AppShellScope extends InheritedWidget {
@@ -134,7 +133,6 @@ class _TabNavigator extends StatelessWidget {
     MindlyTab.home => const HomeScreen(),
     MindlyTab.explore => const ExploreScreen(),
     MindlyTab.leaderboard => const LeaderboardScreen(),
-    MindlyTab.activity => const ActivityScreen(),
     MindlyTab.profile => const ProfileScreen(),
   };
 
@@ -193,7 +191,12 @@ class _BottomNavBar extends StatelessWidget {
                         color: active ? scheme.primary.withValues(alpha: 0.12) : Colors.transparent,
                         borderRadius: BorderRadius.circular(14),
                       ),
-                      child: Icon(active ? tab.activeIcon : tab.icon, color: color, size: 22),
+                      child: SvgPicture.asset(
+                        tab.icon,
+                        width: 22,
+                        height: 22,
+                        colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+                      ),
                     ),
                     const SizedBox(height: 3),
                     Text(
