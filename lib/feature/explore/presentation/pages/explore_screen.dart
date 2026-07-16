@@ -5,8 +5,6 @@ import 'package:mindly/core/const/static_values.dart';
 import 'package:mindly/feature/common/animateed_button.dart';
 import 'package:mindly/route/app_router.dart';
 
-/// Explore tab — mock content: search bar, category grid, popular quizzes.
-/// Only the math quiz launches the real test; the rest is placeholder data.
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
 
@@ -14,8 +12,6 @@ class ExploreScreen extends StatefulWidget {
   State<ExploreScreen> createState() => _ExploreScreenState();
 }
 
-/// Mock data + navigation helpers live in [ExploreMixin]; this State only
-/// builds UI.
 class _ExploreScreenState extends State<ExploreScreen> with ExploreMixin {
   @override
   Widget build(BuildContext context) {
@@ -151,27 +147,24 @@ class _ExploreScreenState extends State<ExploreScreen> with ExploreMixin {
   }
 }
 
-/// Holds the explore tab's (mock) data and navigation helpers so the State
-/// stays UI-only. Instance getters (not statics) — static mixin members are
-/// not inherited, so they wouldn't be reachable from the State's build.
 mixin ExploreMixin on State<ExploreScreen> {
   void navigateToQuiz(String quizId) {
     Navigator.of(context).pushNamed(AppRoutes.quizPlay, arguments: quizId);
   }
 
   List<(String, String, int)> get _categories => const [
-        (AppIcons.lineChart, 'Math', 12),
-        (AppIcons.earth, 'Geography', 8),
-        (AppIcons.reactor, 'Science', 15),
-        (AppIcons.pacman, 'Games', 6),
-        (AppIcons.wallet, 'Economics', 9),
-        (AppIcons.flag, 'History', 11),
-      ];
+    (AppIcons.lineChart, 'Math', 12),
+    (AppIcons.earth, 'Geography', 8),
+    (AppIcons.reactor, 'Science', 15),
+    (AppIcons.pacman, 'Games', 6),
+    (AppIcons.wallet, 'Economics', 9),
+    (AppIcons.flag, 'History', 11),
+  ];
 
   List<(String, String, bool)> get _popular => const [
-        ('Simple Math Quiz', '10 questions · 4.9 ★', true),
-        ('World Capitals', '15 questions · 4.7 ★', false),
-        ('Physics Basics', '12 questions · 4.6 ★', false),
-        ('Famous Paintings', '8 questions · 4.5 ★', false),
-      ];
+    ('Simple Math Quiz', '10 questions · 4.9 ★', true),
+    ('World Capitals', '15 questions · 4.7 ★', false),
+    ('Physics Basics', '12 questions · 4.6 ★', false),
+    ('Famous Paintings', '8 questions · 4.5 ★', false),
+  ];
 }

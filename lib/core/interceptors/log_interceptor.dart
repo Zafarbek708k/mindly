@@ -2,13 +2,6 @@ import 'dart:developer' as dev;
 
 import 'package:dio/dio.dart';
 
-/// Pretty-prints request/response/error to the dev console.
-///
-/// In your original code you implemented [Interceptor] from scratch and left
-/// every method with a `// TODO` — that crashes any request because
-/// `handler.next(...)` is never called. Inherit from [Interceptor] (which is
-/// concrete, not abstract) so all base methods default to passing through,
-/// or call the relevant `handler.next/...` from every override.
 class AppLogInterceptor extends Interceptor {
   final bool logRequestBody;
   final bool logResponseBody;

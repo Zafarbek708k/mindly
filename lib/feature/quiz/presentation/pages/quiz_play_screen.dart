@@ -3,19 +3,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mindly/core/singletons/service_locator.dart';
 import 'package:mindly/feature/common/animateed_button.dart';
 import 'package:mindly/feature/quiz/domain/repositories/quiz_repository.dart';
+import 'package:mindly/feature/quiz/domain/usecases/load_quiz_usecase.dart';
 import 'package:mindly/feature/quiz/presentation/bloc/quiz_cubit.dart';
+import 'package:mindly/feature/quiz/presentation/quiz_args.dart';
 import 'package:mindly/feature/quiz/presentation/widgets/question_indicators.dart';
 import 'package:mindly/route/app_router.dart';
 
 class QuizPlayScreen extends StatelessWidget {
-  const QuizPlayScreen({super.key, required this.quizId});
+  const QuizPlayScreen({super.key, required this.quizId, this.source = QuizSource.local});
 
   final String quizId;
+  final QuizSource source;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => QuizCubit(repository: serviceLocator<QuizRepository>(), quizId: quizId)..start(),
+      create: (_) => QuizCubit(loadQuiz: serviceLocator<LoadQuizUseCase>(), quizId: quizId, source: source)..start(),
       child: const _QuizView(),
     );
   }
@@ -30,7 +33,14 @@ class _QuizView extends StatelessWidget {
     return BlocConsumer<QuizCubit, QuizState>(
       listenWhen: (prev, curr) => curr.status == QuizStatus.finished && prev.status != QuizStatus.finished,
       listener: (context, state) {
-        Navigator.of(context).pushReplacementNamed(AppRoutes.quizResult, arguments: state.result);
+        final cubit = context.read<QuizCubit>();
+        Navigator.of(context).pushReplacementNamed(
+          AppRoutes.quizResult,
+          arguments: QuizResultArgs(
+            result: state.result!,
+            playArgs: QuizPlayArgs(quizId: cubit.quizId, source: cubit.source),
+          ),
+        );
       },
       builder: (context, state) {
         final cubit = context.read<QuizCubit>();

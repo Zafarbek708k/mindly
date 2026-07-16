@@ -3,6 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mindly/core/const/app_icons.dart';
 import 'package:mindly/core/const/static_values.dart';
 import 'package:mindly/feature/common/animateed_button.dart';
+import 'package:mindly/feature/quiz/domain/repositories/quiz_repository.dart';
+import 'package:mindly/feature/quiz/presentation/quiz_args.dart';
 import 'package:mindly/route/app_router.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -10,8 +12,11 @@ class HomeScreen extends StatelessWidget {
 
   static const _mathQuizId = 'math-basics';
 
-  void _startQuiz(BuildContext context) {
-    Navigator.of(context, rootNavigator: true).pushNamed(AppRoutes.quizPlay, arguments: _mathQuizId);
+  void _startQuiz(BuildContext context, {QuizSource source = QuizSource.local}) {
+    Navigator.of(context, rootNavigator: true).pushNamed(
+      AppRoutes.quizPlay,
+      arguments: QuizPlayArgs(quizId: _mathQuizId, source: source),
+    );
   }
 
   @override
@@ -45,9 +50,17 @@ class HomeScreen extends StatelessWidget {
             _FeaturedTile(
               icon: AppIcons.lineChart,
               title: 'Simple Math Quiz',
-              subtitle: '10 questions · 20 min',
+              subtitle: '10 questions · 20 min · offline',
               color: scheme.primary,
               onTap: () => _startQuiz(context),
+            ),
+            const SizedBox(height: AppSpacing.md),
+            _FeaturedTile(
+              icon: AppIcons.switchHorizontal,
+              title: 'Math Quiz — Live API',
+              subtitle: 'Questions loaded from server',
+              color: const Color(0xFF4BA9EF),
+              onTap: () => _startQuiz(context, source: QuizSource.remote),
             ),
             const SizedBox(height: AppSpacing.md),
             _FeaturedTile(

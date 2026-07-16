@@ -1,5 +1,3 @@
-/// SVG icon asset paths (assets/icons/). Use with `SvgPicture.asset`, e.g.
-/// `SvgPicture.asset(AppIcons.home, colorFilter: ...)`.
 sealed class AppIcons {
   static const String _base = 'assets/icons';
 

@@ -3,18 +3,18 @@ import 'dart:math' as math;
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:mindly/feature/quiz/domain/entities/quiz_result.dart';
+import 'package:mindly/feature/quiz/presentation/quiz_args.dart';
 import 'package:mindly/feature/quiz/presentation/widgets/animated_result_chart.dart';
 import 'package:mindly/route/app_router.dart';
 
 class QuizResultScreen extends StatefulWidget {
-  const QuizResultScreen({super.key, required this.result});
+  const QuizResultScreen({super.key, required this.result, required this.playArgs});
 
   final QuizResult result;
+  final QuizPlayArgs playArgs;
 
   static const double lowThreshold = 0.40;
   static const double highThreshold = 0.70;
-
-  /// At or above this share of correct answers → celebrate with confetti.
   static const double confettiThreshold = 0.75;
 
   static const Color lowColor = Color(0xFFE5484D);
@@ -34,8 +34,6 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
   void initState() {
     super.initState();
     _confettiController = ConfettiController(duration: const Duration(seconds: 3));
-    // Celebrate great scores — fire once the first frame is up so the burst
-    // lands together with the chart animation.
     if (result.ratio >= QuizResultScreen.confettiThreshold) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) _confettiController.play();
@@ -62,7 +60,8 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
   }
 
   void _retry(BuildContext context) {
-    Navigator.of(context).pushReplacementNamed(AppRoutes.quizPlay, arguments: 'math-basics');
+    // Same quiz, same source (local JSON or live API), fully fresh state.
+    Navigator.of(context).pushReplacementNamed(AppRoutes.quizPlay, arguments: widget.playArgs);
   }
 
   void _exit(BuildContext context) {
@@ -85,7 +84,6 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
       body: Stack(
         children: [
           _buildBody(context, scheme, bottomPad),
-          // Confetti burst from the top center — only plays for ≥75% scores.
           Align(
             alignment: Alignment.topCenter,
             child: ConfettiWidget(

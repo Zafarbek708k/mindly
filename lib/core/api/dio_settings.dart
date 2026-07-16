@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:mindly/core/interceptors/header_interceptor.dart';
 import 'package:mindly/core/interceptors/log_interceptor.dart';
 import 'package:mindly/core/interceptors/refresh_token_interceptor.dart';
@@ -17,7 +16,7 @@ class DioSettings {
   DioSettings._internal() {
     dio = Dio(_baseOptions);
     dio.interceptors.add(HeaderInterceptor());
-    if (kDebugMode) dio.interceptors.add(AppLogInterceptor());
+    dio.interceptors.add(AppLogInterceptor());
   }
 
   BaseOptions get _baseOptions => BaseOptions(

@@ -7,6 +7,9 @@ class QuizDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      appBar: AppBar(title: const Text('Quiz Details')),
+      body: Center(child: Text('Quiz Details Screen for quizId: $quizId')),
+    );
   }
 }
