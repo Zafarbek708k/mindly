@@ -32,7 +32,7 @@ class RefreshTokenInterceptor extends Interceptor {
 
   Future<bool>? _refreshing;
 
-  RefreshTokenInterceptor({required Dio dio, required this.onAuthFailure}) : _dio = dio;
+  RefreshTokenInterceptor({required this._dio, required this.onAuthFailure});
 
   @override
   Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
@@ -48,12 +48,10 @@ class RefreshTokenInterceptor extends Interceptor {
     }
 
     if (StorageRepository.refreshToken.isEmpty) {
-      // No refresh token — straight to logout, no point trying.
       await _logout();
       return handler.next(err);
     }
 
-    // Single-flight: every 401 in flight awaits the same refresh future.
     final ok = await (_refreshing ??= _refreshTokens());
     _refreshing = null;
 
@@ -61,7 +59,6 @@ class RefreshTokenInterceptor extends Interceptor {
       return handler.next(err);
     }
 
-    // Retry the original request with the fresh access token.
     try {
       final retried = await _dio.fetch<dynamic>(
         originalRequest
@@ -74,12 +71,8 @@ class RefreshTokenInterceptor extends Interceptor {
     }
   }
 
-  /// Calls the refresh endpoint with the stored refresh token. On success
-  /// persists the new pair and returns `true`; on failure clears tokens,
-  /// emits the logout signal, and returns `false`.
   Future<bool> _refreshTokens() async {
     try {
-      // Use a bare Dio so we don't loop back through ourselves.
       final bareDio = Dio(
         BaseOptions(
           baseUrl: Links.baseUrl,

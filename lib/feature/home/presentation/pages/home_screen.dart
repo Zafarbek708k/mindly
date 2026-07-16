@@ -101,12 +101,6 @@ class _Header extends StatelessWidget {
             ],
           ),
         ),
-        SvgPicture.asset(
-          AppIcons.starBadge,
-          width: 26,
-          height: 26,
-          colorFilter: ColorFilter.mode(scheme.primary, BlendMode.srcIn),
-        ),
       ],
     );
   }
@@ -127,7 +121,7 @@ class _DailyChallengeCard extends StatelessWidget {
         padding: const EdgeInsets.all(AppSpacing.xl),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [scheme.primary, scheme.tertiary],
+            colors: [scheme.surface, scheme.secondary],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -163,11 +157,11 @@ class _DailyChallengeCard extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.play_arrow_rounded, color: scheme.primary, size: 18),
+                        Icon(Icons.play_arrow_rounded, color: Colors.blue, size: 18),
                         const SizedBox(width: 4),
                         Text(
                           'Start quiz',
-                          style: TextStyle(color: scheme.primary, fontWeight: FontWeight.w800),
+                          style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w800),
                         ),
                       ],
                     ),

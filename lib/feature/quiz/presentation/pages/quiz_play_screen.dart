@@ -15,10 +15,7 @@ class QuizPlayScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => QuizCubit(
-        repository: serviceLocator<QuizRepository>(),
-        quizId: quizId,
-      )..start(),
+      create: (_) => QuizCubit(repository: serviceLocator<QuizRepository>(), quizId: quizId)..start(),
       child: const _QuizView(),
     );
   }
@@ -29,9 +26,7 @@ class _QuizView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme
-        .of(context)
-        .colorScheme;
+    final scheme = Theme.of(context).colorScheme;
     return BlocConsumer<QuizCubit, QuizState>(
       listenWhen: (prev, curr) => curr.status == QuizStatus.finished && prev.status != QuizStatus.finished,
       listener: (context, state) {
@@ -59,11 +54,10 @@ class _QuizView extends StatelessWidget {
           ),
           body: switch (state.status) {
             QuizStatus.initial || QuizStatus.loading => const Center(child: CircularProgressIndicator()),
-            QuizStatus.error =>
-                _ErrorView(
-                  message: state.errorMessage ?? 'Something went wrong',
-                  onRetry: cubit.restart,
-                ),
+            QuizStatus.error => _ErrorView(
+              message: state.errorMessage ?? 'Something went wrong',
+              onRetry: cubit.restart,
+            ),
             _ => _QuestionBody(state: state, cubit: cubit),
           },
         );
@@ -80,9 +74,7 @@ class _TimerChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme
-        .of(context)
-        .colorScheme;
+    final scheme = Theme.of(context).colorScheme;
     final color = critical ? scheme.error : scheme.primary;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
@@ -112,9 +104,7 @@ class _QuestionBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme
-        .of(context)
-        .colorScheme;
+    final scheme = Theme.of(context).colorScheme;
     final question = state.currentQuestion!;
     final selected = state.currentAnswer;
 
@@ -139,11 +129,7 @@ class _QuestionBody extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 question.text,
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .headlineSmall
-                    ?.copyWith(fontWeight: FontWeight.w800, height: 1.25),
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800, height: 1.25),
               ),
               const SizedBox(height: 24),
               for (var i = 0; i < question.options.length; i++) ...[
@@ -174,9 +160,7 @@ class _OptionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme
-        .of(context)
-        .colorScheme;
+    final scheme = Theme.of(context).colorScheme;
     final borderColor = selected ? scheme.primary : scheme.outlineVariant;
     return AnimatedButton(
       onTap: onTap,
@@ -230,12 +214,8 @@ class _BottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme
-        .of(context)
-        .colorScheme;
-    final bottomPad = MediaQuery
-        .paddingOf(context)
-        .bottom;
+    final scheme = Theme.of(context).colorScheme;
+    final bottomPad = MediaQuery.paddingOf(context).bottom;
     final hasAnswer = state.currentAnswer != null;
 
     return Container(
@@ -296,10 +276,7 @@ class _ErrorView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.error_outline_rounded, size: 48, color: Theme
-                .of(context)
-                .colorScheme
-                .error),
+            Icon(Icons.error_outline_rounded, size: 48, color: Theme.of(context).colorScheme.error),
             const SizedBox(height: 12),
             Text(message, textAlign: TextAlign.center),
             const SizedBox(height: 16),

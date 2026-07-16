@@ -41,7 +41,7 @@ abstract class AppRoutes {
         return _slide(routeSettings, QuizPlayScreen(quizId: args as String? ?? ''));
 
       case quizResult:
-        // Expects a QuizResult argument from the play screen.
+      // Expects a QuizResult argument from the play screen.
         final result = args is QuizResult
             ? args
             : const QuizResult(totalQuestions: 0, correctAnswers: 0, timeSpent: Duration.zero);
@@ -73,7 +73,7 @@ abstract class AppRoutes {
   static Route<dynamic> _noAnim(RouteSettings routeSettings, Widget page) {
     return PageRouteBuilder(
       settings: routeSettings,
-      pageBuilder: (_, __, ___) => page,
+      pageBuilder: (_, n, m) => page,
       transitionDuration: Duration.zero,
       reverseTransitionDuration: Duration.zero,
     );
@@ -83,9 +83,9 @@ abstract class AppRoutes {
   static Route<dynamic> _fade(RouteSettings routeSettings, Widget page) {
     return PageRouteBuilder(
       settings: routeSettings,
-      pageBuilder: (_, __, ___) => page,
+      pageBuilder: (_, n, m) => page,
       transitionDuration: const Duration(milliseconds: 220),
-      transitionsBuilder: (_, animation, __, child) => FadeTransition(opacity: animation, child: child),
+      transitionsBuilder: (_, animation, i, child) => FadeTransition(opacity: animation, child: child),
     );
   }
 
@@ -93,10 +93,10 @@ abstract class AppRoutes {
   static Route<dynamic> _slide(RouteSettings routeSettings, Widget page) {
     return PageRouteBuilder(
       settings: routeSettings,
-      pageBuilder: (_, __, ___) => page,
+      pageBuilder: (_, n, m) => page,
       transitionDuration: const Duration(milliseconds: 260),
       reverseTransitionDuration: const Duration(milliseconds: 220),
-      transitionsBuilder: (_, animation, __, child) {
+      transitionsBuilder: (_, animation, i, child) {
         final curved = CurvedAnimation(parent: animation, curve: Curves.easeOutCubic);
         return SlideTransition(
           position: Tween<Offset>(begin: const Offset(1, 0), end: Offset.zero).animate(curved),

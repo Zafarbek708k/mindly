@@ -25,7 +25,7 @@ class QuestionIndicators extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: count,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        separatorBuilder: (_, i) => const SizedBox(width: 8),
         itemBuilder: (context, i) {
           final answered = isAnswered(i);
           final current = i == currentIndex;
