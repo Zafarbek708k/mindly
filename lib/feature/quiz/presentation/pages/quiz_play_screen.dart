@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindly/core/singletons/service_locator.dart';
 import 'package:mindly/feature/common/animateed_button.dart';
-import 'package:mindly/feature/quiz/data/datasources/quiz_local_datasource.dart';
-import 'package:mindly/feature/quiz/data/repositories/quiz_repository_impl.dart';
+import 'package:mindly/feature/quiz/domain/repositories/quiz_repository.dart';
 import 'package:mindly/feature/quiz/presentation/bloc/quiz_cubit.dart';
 import 'package:mindly/feature/quiz/presentation/widgets/question_indicators.dart';
 import 'package:mindly/route/app_router.dart';
@@ -15,12 +15,10 @@ class QuizPlayScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-      QuizCubit(
-        repository: const QuizRepositoryImpl(dataSource: QuizLocalDataSourceImpl()),
+      create: (_) => QuizCubit(
+        repository: serviceLocator<QuizRepository>(),
         quizId: quizId,
-      )
-        ..start(),
+      )..start(),
       child: const _QuizView(),
     );
   }

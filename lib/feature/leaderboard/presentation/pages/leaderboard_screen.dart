@@ -3,46 +3,20 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mindly/core/const/app_icons.dart';
 import 'package:mindly/core/const/static_values.dart';
 
-class LeaderboardScreen extends StatelessWidget {
+class LeaderboardScreen extends StatefulWidget {
   const LeaderboardScreen({super.key});
 
-  static const _top3 = [
-    (AppIcons.secondPlaceMedal, 'Aziza', 8420),
-    (AppIcons.firstPlaceMedal, 'Timur', 9350),
-    (AppIcons.thirdPlaceMedal, 'Diyor', 7980),
-  ];
+  @override
+  State<LeaderboardScreen> createState() => _LeaderboardScreenState();
+}
 
-  static const _rest = [
-    (4, 'Malika', 7420),
-    (5, 'Sardor', 7100),
-    (6, 'Nilufar', 6875),
-    (7, 'Jasur', 6540),
-    (8, 'Kamola', 6210),
-    (9, 'Bekzod', 5980),
-    (10, 'You', 5720),
-  ];
-
+class _LeaderboardScreenState extends State<LeaderboardScreen> with LeaderBoardMixin {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: scheme.surface,
-      appBar: AppBar(
-        backgroundColor: scheme.surface,
-        title: const Text('Leaderboard'),
-        centerTitle: false,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: AppSpacing.pagePadding),
-            child: SvgPicture.asset(
-              AppIcons.crown,
-              width: 24,
-              height: 24,
-              colorFilter: const ColorFilter.mode(Color(0xFFF08C00), BlendMode.srcIn),
-            ),
-          ),
-        ],
-      ),
+      appBar: AppBar(backgroundColor: scheme.surface, title: const Text('Leaderboard'), centerTitle: true),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(
           AppSpacing.pagePadding,
@@ -51,31 +25,7 @@ class LeaderboardScreen extends StatelessWidget {
           AppSpacing.huge,
         ),
         children: [
-          // Period chips (mock — Global selected).
-          Row(
-            children: [
-              for (final (label, selected) in const [('Global', true), ('Weekly', false), ('Monthly', false)]) ...[
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: selected ? scheme.primary : scheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    label,
-                    style: TextStyle(
-                      color: selected ? scheme.onPrimary : scheme.onSurfaceVariant,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 13,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.sm),
-              ],
-            ],
-          ),
           const SizedBox(height: AppSpacing.xl),
-          // Podium: 2nd, 1st, 3rd.
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -104,7 +54,7 @@ class LeaderboardScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
                       Text(name, style: const TextStyle(fontWeight: FontWeight.w800)),
-                      Text('$score pts', style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 12)),
+                      Text('$score', style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 12)),
                       const SizedBox(height: AppSpacing.sm),
                       Container(
                         height: i == 1 ? 64 : 40,
@@ -149,7 +99,7 @@ class LeaderboardScreen extends StatelessWidget {
                     child: Text(name, style: const TextStyle(fontWeight: FontWeight.w700)),
                   ),
                   Text(
-                    '$score pts',
+                    '$score',
                     style: TextStyle(color: scheme.onSurfaceVariant, fontWeight: FontWeight.w600),
                   ),
                 ],
@@ -161,4 +111,22 @@ class LeaderboardScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+mixin LeaderBoardMixin on State<LeaderboardScreen> {
+  List<(String, String, int)> get _top3 => const [
+    (AppIcons.secondPlaceMedal, 'Aziza', 8420),
+    (AppIcons.firstPlaceMedal, 'Timur', 9350),
+    (AppIcons.thirdPlaceMedal, 'Diyor', 7980),
+  ];
+
+  List<(int, String, int)> get _rest => const [
+    (4, 'Malika', 7420),
+    (5, 'Sardor', 7100),
+    (6, 'Nilufar', 6875),
+    (7, 'Jasur', 6540),
+    (8, 'Kamola', 6210),
+    (9, 'Bekzod', 5980),
+    (10, 'You', 5720),
+  ];
 }

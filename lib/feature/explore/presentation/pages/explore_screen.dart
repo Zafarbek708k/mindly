@@ -7,25 +7,16 @@ import 'package:mindly/route/app_router.dart';
 
 /// Explore tab — mock content: search bar, category grid, popular quizzes.
 /// Only the math quiz launches the real test; the rest is placeholder data.
-class ExploreScreen extends StatelessWidget {
+class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
 
-  static const _categories = [
-    (AppIcons.lineChart, 'Math', 12),
-    (AppIcons.earth, 'Geography', 8),
-    (AppIcons.reactor, 'Science', 15),
-    (AppIcons.pacman, 'Games', 6),
-    (AppIcons.wallet, 'Economics', 9),
-    (AppIcons.flag, 'History', 11),
-  ];
+  @override
+  State<ExploreScreen> createState() => _ExploreScreenState();
+}
 
-  static const _popular = [
-    ('Simple Math Quiz', '10 questions · 4.9 ★', true),
-    ('World Capitals', '15 questions · 4.7 ★', false),
-    ('Physics Basics', '12 questions · 4.6 ★', false),
-    ('Famous Paintings', '8 questions · 4.5 ★', false),
-  ];
-
+/// Mock data + navigation helpers live in [ExploreMixin]; this State only
+/// builds UI.
+class _ExploreScreenState extends State<ExploreScreen> with ExploreMixin {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
@@ -56,10 +47,7 @@ class ExploreScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.xl),
-          Text(
-            'Categories',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
-          ),
+          Text('Categories', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800)),
           const SizedBox(height: AppSpacing.md),
           GridView.count(
             crossAxisCount: 2,
@@ -105,10 +93,7 @@ class ExploreScreen extends StatelessWidget {
                               style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
                               overflow: TextOverflow.ellipsis,
                             ),
-                            Text(
-                              '$count quizzes',
-                              style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 11),
-                            ),
+                            Text('$count quizzes', style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 11)),
                           ],
                         ),
                       ),
@@ -125,9 +110,7 @@ class ExploreScreen extends StatelessWidget {
           const SizedBox(height: AppSpacing.md),
           for (final (title, subtitle, isReal) in _popular) ...[
             AnimatedButton(
-              onTap: isReal
-                  ? () => Navigator.of(context).pushNamed(AppRoutes.quizPlay, arguments: 'math-basics')
-                  : () {},
+              onTap: isReal ? () => navigateToQuiz('math-basics') : () {},
               isDisabled: !isReal,
               scaleValue: 0.98,
               child: Container(
@@ -151,10 +134,7 @@ class ExploreScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(title, style: const TextStyle(fontWeight: FontWeight.w800)),
-                          Text(
-                            subtitle,
-                            style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 12),
-                          ),
+                          Text(subtitle, style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 12)),
                         ],
                       ),
                     ),
@@ -169,4 +149,29 @@ class ExploreScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Holds the explore tab's (mock) data and navigation helpers so the State
+/// stays UI-only. Instance getters (not statics) — static mixin members are
+/// not inherited, so they wouldn't be reachable from the State's build.
+mixin ExploreMixin on State<ExploreScreen> {
+  void navigateToQuiz(String quizId) {
+    Navigator.of(context).pushNamed(AppRoutes.quizPlay, arguments: quizId);
+  }
+
+  List<(String, String, int)> get _categories => const [
+        (AppIcons.lineChart, 'Math', 12),
+        (AppIcons.earth, 'Geography', 8),
+        (AppIcons.reactor, 'Science', 15),
+        (AppIcons.pacman, 'Games', 6),
+        (AppIcons.wallet, 'Economics', 9),
+        (AppIcons.flag, 'History', 11),
+      ];
+
+  List<(String, String, bool)> get _popular => const [
+        ('Simple Math Quiz', '10 questions · 4.9 ★', true),
+        ('World Capitals', '15 questions · 4.7 ★', false),
+        ('Physics Basics', '12 questions · 4.6 ★', false),
+        ('Famous Paintings', '8 questions · 4.5 ★', false),
+      ];
 }

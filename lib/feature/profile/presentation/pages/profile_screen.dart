@@ -96,11 +96,14 @@ class ProfileScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.xl),
-          Container(
-            decoration: BoxDecoration(
-              color: scheme.surface,
+          // Material (not a decorated Container) so the ListTiles' ink
+          // splashes stay visible — a DecoratedBox color would hide them.
+          Material(
+            color: scheme.surface,
+            clipBehavior: Clip.antiAlias,
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppSpacing.radiusXl),
-              border: Border.all(color: scheme.outlineVariant),
+              side: BorderSide(color: scheme.outlineVariant),
             ),
             child: Column(
               children: [

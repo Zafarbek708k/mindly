@@ -5,8 +5,6 @@ import 'package:mindly/core/const/static_values.dart';
 import 'package:mindly/feature/common/animateed_button.dart';
 import 'package:mindly/route/app_router.dart';
 
-/// Home tab: greeting, the daily-challenge CTA that launches the REAL math
-/// quiz (the app_task.md module), and mock category/featured sections.
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 

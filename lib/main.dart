@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mindly/core/singletons/service_locator.dart';
 import 'package:mindly/route/app_router.dart';
 
 void main() {
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+      await setupLocator(); // storage, Dio + interceptors, feature DI
 
       FlutterError.onError = (FlutterErrorDetails details) {
         FlutterError.presentError(details);

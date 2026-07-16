@@ -44,7 +44,6 @@ class QuizCubit extends Cubit<QuizState> {
     _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
       final left = state.remainingSeconds - 1;
       if (left <= 0) {
-        // Time is up — auto-finish (lib/app_task.md §1.1).
         emit(state.copyWith(remainingSeconds: 0));
         finish();
         return;
